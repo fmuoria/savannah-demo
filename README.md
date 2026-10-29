@@ -6,6 +6,8 @@ This is a clickable 5-step walkthrough of Savannah, a system that predicts medic
 
 ## Steps
 
+The demo opens on an intro screen that sets out the problem. It then walks through five steps:
+
 1. **Prescriptions in.** Raw prescription entries become structured consumption events.
 2. **Forecast.** Stock on hand compared with forecast daily use, with a stock-out warning 14 days ahead.
 3. **Purchase order.** The order quantity is worked out from the forecast, the 6-day supplier lead time and safety stock.
