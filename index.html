@@ -4,30 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Savannah Demo</title>
-<meta name="description" content="Interactive product demo of Savannah: predictive medicine stock management for hospitals in Sub-Saharan Africa. All data is simulated.">
+<meta name="description" content="Interactive product demo of Savannah: predictive medicine stock management, financing and pooled buying for hospitals in Kenya. All data is simulated and hospital names are fictional.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* surfaces */
   --canvas:#FFFFFF; --tint:#F1F6FA; --tint-2:#E4EEF6;
-  /* text */
   --ink:#0E2841; --ink-2:#44546A; --ink-3:#5F6E81;
   --line:rgba(14,40,65,.12); --line-2:rgba(14,40,65,.07);
-  /* single interactive accent */
   --accent:#0A5BB5; --accent-hover:#084C98;
-  /* status */
   --alert:#B4232F; --alert-bg:#FCEEEF; --alert-line:#F0C4C8;
   --watch:#7A5000; --watch-bg:#FFF3D6; --watch-line:#B7791F;
   --safe:#1C6E4A; --safe-bg:#E6F3EC;
   --sun:#E8B23A;
-  /* type */
   --sans:"Public Sans",system-ui,sans-serif;
   --serif:"Source Serif 4",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --shadow:0 1px 3px rgba(14,40,65,.06);
-  --wrap:1240px;
+  --wrap:1280px;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -38,26 +33,28 @@ button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 .wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 32px}
 
-/* Utility bar + header (hospital-site pattern) */
+/* Utility bar + header */
 .utility{background:var(--tint);font-size:14px;color:var(--ink-2)}
 .utility .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:8px;padding-bottom:8px}
 .utility .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sun);margin-right:8px;vertical-align:1px}
 header.site{border-bottom:1px solid var(--line);background:var(--canvas);position:sticky;top:0;z-index:5}
-header.site .wrap{display:flex;align-items:center;gap:32px;min-height:72px}
+header.site .wrap{display:flex;align-items:center;gap:24px;min-height:72px}
 .brand{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:26px;letter-spacing:-.01em;color:var(--ink)}
 .brand svg{display:block}
-.steps{display:flex;gap:4px;margin:0;padding:0;list-style:none;align-self:stretch}
+header.site nav{align-self:stretch;display:flex}
+.steps{display:flex;gap:0;margin:0;padding:0;list-style:none}
 .steps li{display:flex}
-.steps button{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 12px;font-weight:500;font-size:15px;color:var(--ink-2);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.steps button{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:0 10px;font-weight:500;font-size:15px;color:var(--ink-2);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .steps button .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);font-size:13px;color:var(--ink-3)}
 .steps button:hover{color:var(--ink)}
 .steps button[aria-current="step"]{color:var(--ink);border-bottom-color:var(--accent)}
 .steps button[aria-current="step"] .n{background:var(--accent);border-color:var(--accent);color:#fff}
 .steps button.done .n{border-color:var(--accent);color:var(--accent)}
 .steps button:focus-visible{outline-offset:-4px}
+.steps .sep{width:1px;background:var(--line);margin:22px 6px}
 header.site .cta{margin-left:auto}
 
-/* Buttons: pill, solid accent */
+/* Buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--ink);background:var(--canvas);color:var(--ink);border-radius:999px;padding:10px 24px;font-weight:500;font-size:16px;cursor:pointer;line-height:1.25;text-decoration:none}
 .btn:hover{background:var(--tint)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -69,17 +66,20 @@ header.site .cta{margin-left:auto}
 
 main{flex:1}
 .step{display:none;padding:48px 0 32px}
-#s0{padding:0}
 .step.on{display:block}
+#s0{padding:0}
 
-/* Step heading: two columns, like the hospital sites */
+/* Step heading */
 .head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end;margin-bottom:32px}
 .count{font-size:14px;color:var(--ink-3);margin:0 0 8px}
-h1,h2.serif{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.12;margin:0}
-h1{font-size:44px}
+.role{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;font-size:13px;font-weight:500}
+.role.hosp{background:var(--tint-2);color:var(--ink)}
+.role.adm{background:var(--ink);color:#fff}
+h1{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.12;margin:0;font-size:44px}
+h2.sec{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.2;margin:48px 0 16px}
 .lede{color:var(--ink-2);margin:0;font-size:18px;line-height:1.55;max-width:60ch}
 
-/* Panels (L1) */
+/* Panels */
 .panel{background:var(--canvas);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
 .panel-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--tint);border-bottom:1px solid var(--line);font-weight:600;font-size:15px}
 .panel-h .sub{font-weight:400;color:var(--ink-3);font-size:14px}
@@ -89,15 +89,20 @@ h1{font-size:44px}
 .live.paused{color:var(--ink-3)}
 .live.paused::before{background:var(--ink-3);animation:none}
 @keyframes pulse{50%{opacity:.25}}
+.scroll-x{overflow-x:auto}
+.scroll-x>table{min-width:680px}
 
 table{border-collapse:collapse;width:100%;font-size:15px}
-th{font-weight:500;color:var(--ink-3);text-align:left;font-size:14px;padding:8px 16px;border-bottom:1px solid var(--line)}
-td{padding:8px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
-td.num,th.num{text-align:right}
+th{font-weight:500;color:var(--ink-3);text-align:left;font-size:14px;padding:8px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 16px;border-bottom:1px solid var(--line-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
 .meta{color:var(--ink-3);font-size:14px}
+.up{color:var(--alert);font-weight:500}
+.nowrap{white-space:nowrap}
 
 /* Intro */
-.intro{background:var(--ink);color:#fff;padding:0}
+.intro{background:var(--ink);color:#fff}
 .intro .wrap{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:64px;align-items:center;padding-top:72px;padding-bottom:72px}
 .intro h1{font-size:56px;color:#fff;max-width:16ch}
 .intro .lede{color:#C9D5E3;margin-top:24px;font-size:19px}
@@ -117,41 +122,47 @@ td.num,th.num{text-align:right}
 .grid-legend .m::before{box-shadow:inset 0 0 0 1.5px #F08A93}
 .grid-big{font-family:var(--serif);font-size:40px;line-height:1.1;margin:24px 0 4px}
 .facts{background:var(--tint)}
-.facts .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding-top:32px;padding-bottom:32px}
+.facts .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-top:32px;padding-bottom:32px}
 .facts div.f{padding:0 32px;border-left:1px solid var(--line)}
 .facts div.f:first-child{padding-left:0;border-left:0}
 .facts .n{font-family:var(--serif);font-size:36px;line-height:1.15}
-.facts p{margin:4px 0 0;color:var(--ink-2);font-size:15px;max-width:34ch}
+.facts p{margin:4px 0 0;color:var(--ink-2);font-size:15px;max-width:36ch}
 .facts .src{grid-column:1/-1;margin-top:24px;padding:0;max-width:none}
 
-/* Step 1 */
+/* Tally strip */
 .tally{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .tally>div{padding:16px 24px;border-left:1px solid var(--line)}
 .tally>div:first-child{border-left:0;padding-left:0}
 .tally .k{font-size:14px;color:var(--ink-3)}
 .tally .v{font-family:var(--serif);font-size:32px;line-height:1.2}
+.tally .v small{font-family:var(--sans);font-size:14px;color:var(--ink-3);margin-left:6px}
+
+/* Step 1 */
+.hms{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--ink-2);margin:-8px 0 24px}
+.hms .ok{display:inline-flex;align-items:center;gap:8px;color:var(--safe);font-weight:500}
+.hms .ok::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--safe)}
+.cond-table td:first-child{font-weight:500}
+.cond-table .tx{color:var(--ink-2)}
 .ingest{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px}
-.raw{font-family:var(--mono);font-size:12px;line-height:1.7;height:392px;overflow:hidden;padding:12px 16px;color:#33465C}
+.raw{font-family:var(--mono);font-size:12px;line-height:1.7;height:340px;overflow:hidden;padding:12px 16px;color:#33465C}
 .raw div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .raw .new,.events tbody tr.new{animation:flash 1.4s ease-out}
 @keyframes flash{from{background:#E3EEF9}to{background:transparent}}
 .raw .q{color:var(--accent)}
-.events{height:392px;overflow:hidden}
+.events{height:340px;overflow:hidden}
 .events table{table-layout:fixed;font-size:14px}
-.events th,.events td{padding-left:12px;padding-right:12px;overflow:hidden;text-overflow:ellipsis}
-.events th:nth-child(1){width:76px}.events th:nth-child(3){width:88px}.events th:nth-child(4){width:148px}.events th:nth-child(5){width:120px}
-@media (max-width:1240px){.events td:nth-child(5),.events th:nth-child(5){display:none}}
-.cond{font-size:14px;color:var(--ink-2)}
-.cond::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--ink-3)}
-.cond.dm::before{background:var(--accent)}
-.cond.htn::before{background:var(--watch-line)}
+.events th,.events td{padding:8px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
+.events th:nth-child(1){width:68px}.events th:nth-child(3){width:96px}.events th:nth-child(4){width:170px}.events th:nth-child(5){width:84px}
+@media (max-width:1240px){.events td:nth-child(4),.events th:nth-child(4){display:none}}
+.pay{font-weight:500}
+.pay.cash{color:var(--safe)}
 
 /* Step 2 */
 .alert{display:flex;gap:24px;align-items:center;background:var(--alert-bg);border:1px solid var(--alert-line);border-left:4px solid var(--alert);border-radius:12px;padding:16px 24px;margin-bottom:24px}
 .alert .big{font-size:20px;font-weight:600;color:var(--alert);line-height:1.3}
 .alert p{margin:4px 0 0;color:var(--ink-2);max-width:72ch}
 .alert .btn{margin-left:auto;flex-shrink:0}
-.forecast{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+.forecast{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:24px;align-items:start}
 .chart{padding:8px 8px 0}
 .chart svg{width:100%;height:auto;display:block}
 .legend{display:flex;gap:24px;flex-wrap:wrap;padding:8px 16px 16px;font-size:14px;color:var(--ink-2)}
@@ -159,96 +170,155 @@ td.num,th.num{text-align:right}
 .legend .l-stock::before{background:var(--ink)}
 .legend .l-use::before{background:var(--watch-line)}
 .legend .l-gap::before{height:12px;vertical-align:-1px;background:var(--alert-bg);border:1px solid var(--alert-line)}
-.cover td{padding:12px 16px}
-.cover td:first-child{white-space:normal}
-.bar{height:6px;background:var(--tint-2);border-radius:3px;width:48px;display:inline-block;vertical-align:2px;margin-right:8px;overflow:hidden}
+.cover td{padding:10px 12px;vertical-align:middle}
+.cover td:first-child{white-space:nowrap;padding-left:16px}
+.bar{height:6px;background:var(--tint-2);border-radius:3px;width:44px;display:inline-block;vertical-align:2px;margin-right:8px;overflow:hidden}
 .bar i{display:block;height:100%;border-radius:3px}
-.st{font-size:14px;font-weight:500}
+.st{font-size:14px;font-weight:500;white-space:nowrap}
 .st.act{color:var(--alert)} .st.watch{color:var(--watch)} .st.ok{color:var(--safe)}
-.drivers{padding:16px;font-size:14px;color:var(--ink-2);border-top:1px solid var(--line)}
+.netnote{padding:16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2);background:#FAFCFE}
+.netnote b{color:var(--ink)}
+.followup td{vertical-align:top}
+.outcome.bad{color:var(--alert);font-weight:500}
+.outcome.good{color:var(--safe);font-weight:500}
+.fu-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.fu-sum>div{padding:16px;border-left:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+.fu-sum>div:first-child{border-left:0}
+.fu-sum .n{font-family:var(--serif);font-size:28px;color:var(--ink);line-height:1.2}
 
 /* Step 3 */
-.po-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
-.po{padding:24px 32px 32px}
-.po-head{display:flex;justify-content:space-between;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:16px}
-.po-head h2{margin:0;font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2}
-.po-head .meta{text-align:right}
+.req-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:start}
+.doc{padding:24px 32px 32px}
+.doc-head{display:flex;justify-content:space-between;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:16px}
+.doc-head h2{margin:0;font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2}
+.doc-head .meta{text-align:right}
 .status{display:inline-block;margin-top:4px;font-size:14px;color:var(--watch);font-weight:500}
 .status.ok{color:var(--safe)}
-.po dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;margin:0 0 16px;font-size:15px}
-.po dt{color:var(--ink-3)} .po dd{margin:0}
-.po table td,.po table th{padding-left:0}
-.po .total td{border-bottom:0;font-weight:600;font-size:18px;padding-top:16px}
+.doc dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;margin:0 0 16px;font-size:15px}
+.doc dt{color:var(--ink-3)} .doc dd{margin:0}
+.doc table td,.doc table th{padding-left:0;vertical-align:top}
+.doc table td.num,.doc table th.num{padding-right:0;padding-left:12px}
+.strike{text-decoration:line-through;color:var(--ink-3)}
+.doc .total td{border-top:2px solid var(--ink);border-bottom:0;font-weight:600;font-size:18px;padding-top:16px}
+.saveline{margin-top:16px;padding:12px 16px;background:var(--safe-bg);border-radius:8px;color:var(--safe);font-weight:500}
 .actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center}
-.calc{padding:8px 24px 24px}
-.calc h3{font-size:16px;font-weight:600;margin:16px 0 8px}
+.side-stack{display:grid;gap:24px}
+.calc{padding:8px 24px 20px}
 .calc .row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line-2);font-size:15px}
 .calc .row span:first-child{color:var(--ink-2)}
 .calc .row.res{border-bottom:0;font-weight:600;font-size:16px;border-top:2px solid var(--ink);margin-top:4px}
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.credit{padding:20px 24px 24px}
+.meter{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--tint-2);margin:12px 0 8px}
+.meter i{display:block;height:100%}
+.meter .used{background:var(--ink)} .meter .this{background:var(--accent)}
+.meter-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.meter-legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:0}
+.meter-legend .u::before{background:var(--ink)} .meter-legend .t::before{background:var(--accent)} .meter-legend .a::before{background:var(--tint-2);box-shadow:inset 0 0 0 1px var(--line)}
+.credit .big{font-family:var(--serif);font-size:30px;line-height:1.2}
+.credit p{margin:12px 0 0;font-size:15px;color:var(--ink-2)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
 .compare>div{border-radius:8px;padding:12px 16px;font-size:14px;color:var(--ink-2)}
 .compare .a{background:var(--safe-bg)} .compare .b{background:var(--alert-bg)}
-.compare .h{font-weight:500;color:var(--ink)}
-.compare .n{font-family:var(--serif);font-size:26px;line-height:1.2;color:var(--ink);margin:4px 0}
+.compare .h{font-weight:600;color:var(--ink);margin-bottom:4px}
 .toast{position:fixed;left:50%;bottom:32px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 24px;border-radius:24px;max-width:calc(100% - 32px);text-align:center;font-weight:500;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* Step 4 */
-.gpo{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:start}
-.fac td:first-child{white-space:normal}
-.gpo>.panel:first-child{overflow-x:auto}
-.fac tr.me td{background:#F7FAFD}
+/* Step 4: network heatmap */
+.net{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.heat{font-size:14px}
+.heat th{font-size:13px;vertical-align:bottom;white-space:normal;line-height:1.3;padding:10px 6px;text-align:center;min-width:84px}
+.heat th:first-child{text-align:left;padding-left:16px;min-width:170px}
+.heat th .lv{display:block;color:var(--ink-3);font-weight:400}
+.heat td{text-align:center;padding:6px;vertical-align:middle;border-bottom:1px solid var(--line-2)}
+.heat td:first-child{text-align:left;padding-left:16px;font-weight:500;white-space:nowrap}
+.heat td i{display:block;font-style:normal;border-radius:6px;padding:6px 0;font-weight:500}
+.heat .c-out{background:var(--alert);color:#fff}
+.heat .c-low{background:var(--alert-bg);color:var(--alert)}
+.heat .c-watch{background:var(--watch-bg);color:var(--watch)}
+.heat .c-ok{color:var(--ink-3)}
+.heat-legend{display:flex;gap:16px;flex-wrap:wrap;padding:12px 16px;font-size:14px;color:var(--ink-2);border-top:1px solid var(--line)}
+.heat-legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.heat-legend .o::before{background:var(--alert)} .heat-legend .l::before{background:var(--alert-bg);box-shadow:inset 0 0 0 1px var(--alert-line)} .heat-legend .w::before{background:var(--watch-bg);box-shadow:inset 0 0 0 1px #E9D29B}
+.opps{list-style:none;margin:0;padding:0}
+.opps li{padding:14px 16px;border-bottom:1px solid var(--line-2)}
+.opps li:last-child{border-bottom:0}
+.opps .t{font-weight:600}
+.opps .d{font-size:14px;color:var(--ink-2)}
+.opps li.top{background:#F7FAFD}
+
+/* Step 5: pooled buying */
+.pool-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
 .pool{padding:24px}
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.tiers>div{padding:12px 16px;border-left:1px solid var(--line);font-size:14px;color:var(--ink-3);transition:background .3s,color .3s}
-.tiers>div:first-child{border-left:0}
-.tiers .p{font-family:var(--serif);font-size:26px;color:var(--ink);line-height:1.25}
-.tiers .active{background:var(--ink);color:#C9D5E3}
-.tiers .active .p{color:#fff}
-.pool-bar{position:relative;height:40px;background:var(--tint-2);border-radius:8px;margin:40px 0 32px;display:flex}
+.pool h3,.neg h3{font-size:16px;font-weight:600;margin:0 0 4px}
+.pool-bar{position:relative;height:36px;background:var(--tint-2);border-radius:8px;margin:40px 0 32px;display:flex}
 .pool-bar .seg{height:100%;width:0;transition:width .7s cubic-bezier(.3,.7,.2,1);border-right:2px solid #fff}
 .pool-bar .seg:first-child{border-radius:8px 0 0 8px}
 .thr{position:absolute;top:-28px;bottom:-24px;border-left:1.5px dashed var(--ink-3);font-size:13px;color:var(--ink-2)}
 .thr span{position:absolute;top:0;left:8px;white-space:nowrap}
 .thr em{position:absolute;bottom:0;left:8px;font-style:normal;white-space:nowrap;color:var(--ink-3)}
-.save{font-size:15px;color:var(--ink-2)}
-.save .big{display:block;font-family:var(--serif);font-size:32px;line-height:1.2;color:var(--safe);margin:8px 0 4px}
+.neg{padding:0 24px 24px}
+.quotes{list-style:none;margin:8px 0 0;padding:0;font-size:15px}
+.quotes li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line-2);opacity:.35;transition:opacity .3s}
+.quotes li.in{opacity:1}
+.quotes li.win{font-weight:600;color:var(--safe)}
+.ladder{padding:8px 24px 24px}
+.rung{display:grid;grid-template-columns:minmax(0,1fr) 84px;gap:4px 12px;align-items:center;margin-top:14px}
+.rung .lbl{font-size:14px;color:var(--ink-2);grid-column:1/-1}
+.rung .track{height:22px;background:var(--tint);border-radius:4px;overflow:hidden}
+.rung .fillb{height:100%;border-radius:4px;transition:width .6s ease}
+.rung .val{font-weight:600;text-align:right}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.split>div{border-radius:8px;padding:12px 16px}
+.split .h{font-size:14px;color:var(--ink-2)}
+.split .n{font-family:var(--serif);font-size:28px;line-height:1.2}
+.split .hosp{background:var(--safe-bg)} .split .hosp .n{color:var(--safe)}
+.split .sav{background:var(--tint)}
+.bigsave{padding:24px;background:var(--safe-bg);border-top:1px solid var(--line)}
+.bigsave .n{font-family:var(--serif);font-size:48px;line-height:1.1;color:var(--safe)}
+.bigsave p{margin:4px 0 0;color:var(--ink-2)}
+.pending{color:var(--ink-3)}
 
-/* Step 5 */
+/* Step 6 */
 .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--ink);border-bottom:1px solid var(--line);margin-bottom:32px}
-.kpi{padding:24px 32px 24px;border-left:1px solid var(--line)}
+.kpi{padding:24px 32px;border-left:1px solid var(--line)}
 .kpi:first-child{border-left:0;padding-left:0}
 .kpi .k{font-size:15px;color:var(--ink-2)}
 .kpi .v{font-family:var(--serif);font-size:60px;letter-spacing:-.02em;line-height:1.1;margin:8px 0}
 .kpi .v.safe{color:var(--safe)}
-.kpi .c{font-size:14px;color:var(--ink-3);max-width:36ch}
-.impact{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start}
-.sum td{border-top:2px solid var(--ink);border-bottom:0;font-weight:600}
+.kpi .c{font-size:14px;color:var(--ink-3);max-width:38ch}
+.impact{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:24px;align-items:start}
+.hbars td{vertical-align:middle}
+.hbars .hb{display:flex;align-items:center;gap:12px}
+.hbars .hb .track{flex:1;height:14px;background:var(--tint);border-radius:4px;overflow:hidden;min-width:80px}
+.hbars .hb .track i{display:block;height:100%;background:var(--safe);border-radius:4px;width:0;transition:width .8s cubic-bezier(.3,.7,.2,1)}
+.hbars .hb b{min-width:84px;text-align:right}
+.fr{white-space:nowrap}
+.fr s{color:var(--ink-3);text-decoration:none}
+.sum td{border-top:2px solid var(--ink);font-weight:600}
 
-/* Bottom nav + footer */
+/* Pager + footer */
 .pager{border-top:1px solid var(--line);margin-top:48px;padding-top:24px;display:flex;gap:12px;align-items:center}
 .pager .hint{color:var(--ink-3);font-size:14px;margin-right:auto}
 footer{border-top:1px solid var(--line);background:var(--tint);font-size:14px;color:var(--ink-3)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24px;padding-bottom:24px;flex-wrap:wrap}
 
+@media (max-width:1280px){ header.site .cta{display:none} }
 @media (max-width:1100px){
-  .forecast,.po-wrap,.gpo,.impact,.ingest{grid-template-columns:minmax(0,1fr)}
+  .forecast,.req-wrap,.pool-wrap,.impact,.ingest,.net{grid-template-columns:minmax(0,1fr)}
   .raw,.events{height:280px}
   .head{grid-template-columns:minmax(0,1fr);gap:16px}
   .intro .wrap{grid-template-columns:minmax(0,1fr);gap:48px}
-  header.site .cta{display:none}
-}
-@media (max-width:900px){
   header.site .wrap{flex-wrap:wrap;gap:0;padding-top:12px}
-  header.site nav{order:3;width:calc(100% + 32px);margin:8px -16px 0;overflow-x:auto;scrollbar-width:none}
-  .steps{height:48px;padding:0 4px}
+  header.site nav{order:3;width:calc(100% + 64px);margin:8px -32px 0;padding:0 22px;overflow-x:auto;scrollbar-width:none;height:48px}
 }
 @media (max-width:720px){
   .wrap{padding:0 16px}
+  header.site nav{width:calc(100% + 32px);margin:8px -16px 0;padding:0 6px}
   .utility .wrap{flex-direction:column;gap:0}
   .utility .org{display:none}
   .step{padding-top:32px}
   h1{font-size:32px}
+  h2.sec{font-size:24px;margin-top:40px}
   .intro h1{font-size:38px}
   .intro .wrap{padding-top:48px;padding-bottom:48px}
   .grid-card{padding:24px}
@@ -265,14 +335,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
   .alert .btn{margin-left:0}
   .pager .hint{display:none}
   .pager{justify-content:flex-end}
-  .events td:nth-child(4),.events th:nth-child(4){display:none}
-  .compare{grid-template-columns:1fr}
-  .po{padding:16px}
-  .po-head{flex-wrap:wrap}
-  .po-head .meta{text-align:left}
-  .po td,.po th{white-space:normal}
-  .po dl{grid-template-columns:1fr}
-  .po dd{margin-bottom:8px}
+  .events td:nth-child(5),.events th:nth-child(5){display:none}
+  .compare,.split,.fu-sum{grid-template-columns:1fr}
+  .fu-sum>div{border-left:0;border-top:1px solid var(--line)}
+  .fu-sum>div:first-child{border-top:0}
+  .doc{padding:16px}
+  .doc-head{flex-wrap:wrap}
+  .doc-head .meta{text-align:left}
+  .doc dl{grid-template-columns:1fr}
+  .doc dd{margin-bottom:8px}
+  .cond-table .tx{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -283,7 +355,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
 
 <div class="utility">
   <div class="wrap">
-    <span><span class="dot" aria-hidden="true"></span>Product demo with simulated data. No patient information is used.</span>
+    <span><span class="dot" aria-hidden="true"></span>Product demo with simulated data. Hospital names are fictional and no patient information is used.</span>
     <span class="org">Savannah Inventory Partners, Nairobi</span>
   </div>
 </div>
@@ -296,11 +368,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
     </button>
     <nav aria-label="Demo steps">
       <ol class="steps">
-        <li><button data-go="1"><span class="n">1</span>Prescriptions</button></li>
+        <li><button data-go="1"><span class="n">1</span>Diagnoses</button></li>
         <li><button data-go="2"><span class="n">2</span>Forecast</button></li>
-        <li><button data-go="3"><span class="n">3</span>Purchase order</button></li>
-        <li><button data-go="4"><span class="n">4</span>Group buying</button></li>
-        <li><button data-go="5"><span class="n">5</span>Impact</button></li>
+        <li><button data-go="3"><span class="n">3</span>Stock request</button></li>
+        <li class="sep" aria-hidden="true"></li>
+        <li><button data-go="4"><span class="n">4</span>Network</button></li>
+        <li><button data-go="5"><span class="n">5</span>Pooled buying</button></li>
+        <li class="sep" aria-hidden="true"></li>
+        <li><button data-go="6"><span class="n">6</span>Impact</button></li>
       </ol>
     </nav>
     <button class="btn primary small cta" id="ctaTop">Start the demo</button>
@@ -314,10 +389,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
       <div class="wrap">
         <div>
           <h1 id="h0">The right medicine on the shelf before the patient arrives</h1>
-          <p class="lede">Savannah predicts medicine demand in Kenyan hospitals from prescriptions, clinic visits and disease trends. It orders stock before it runs out and pools orders across hospitals to cut prices.</p>
+          <p class="lede">Savannah connects to hospital management systems, from rural Level 4 hospitals to national referral hospitals. It predicts which medicines will run out, finances the order and pools purchases across hospitals to cut prices.</p>
           <div class="actions">
             <button class="btn primary" data-go="1">Start the demo</button>
-            <button class="link" data-go="5">See the results</button>
+            <button class="link" data-go="6">See the savings</button>
           </div>
         </div>
         <div class="grid-card">
@@ -331,21 +406,34 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
     <div class="facts">
       <div class="wrap">
         <div class="f"><div class="n">43%</div><p>of hospital medicine stock is lost to expiry, tying up cash the hospital needs.</p></div>
+        <div class="f"><div class="n">33%</div><p>is added between the distributor and the retailer. Hospitals buying alone pay that margin in full.</p></div>
         <div class="f"><div class="n">40–60%</div><p>more is paid for medicines bought in a hurry on the spot market after a stockout.</p></div>
-        <div class="f"><div class="n">45%</div><p>of outpatient visits are for chronic conditions like diabetes and hypertension, so demand is predictable.</p></div>
         <p class="meta src">From Savannah's field research across Level 3 and Level 4 hospitals in Kenya.</p>
       </div>
     </div>
   </section>
 
-  <!-- STEP 1 -->
+  <!-- STEP 1: DIAGNOSES -->
   <section class="step" id="s1" aria-labelledby="h1">
     <div class="wrap">
       <div class="head">
-        <div><p class="count">Step 1 of 5</p><h1 id="h1">Every prescription becomes a demand signal</h1></div>
-        <p class="lede">Savannah reads prescriptions as doctors write them in the hospital's records system and turns free-text entries into clean consumption data, medicine by medicine.</p>
+        <div><p class="count">Step 1 of 6<span class="role hosp">Hospital view</span></p><h1 id="h1">What the hospital treats decides what it needs</h1></div>
+        <p class="lede">Savannah plugs into the hospital management system. It sees the most common conditions, how doctors treat them and what that means for medicine stock, across every department.</p>
       </div>
+      <div class="hms"><span class="ok">Connected to Acacia Ridge Hospital</span><span>Hospital management system</span><span>Pharmacy stock</span><span>Billing and payments</span></div>
       <div class="tally" id="tally"></div>
+
+      <div class="panel">
+        <div class="panel-h">Most common conditions <span class="sub">last 30 days, and the medicine needed for the next 30</span></div>
+        <div class="scroll-x">
+          <table class="cond-table">
+            <thead><tr><th>Condition</th><th class="num">Patients</th><th class="num">Change</th><th>How it's treated</th><th class="num">Needed next 30 days</th></tr></thead>
+            <tbody id="conds"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h2 class="sec">Every prescription becomes a demand signal</h2>
       <div class="ingest">
         <div class="panel">
           <div class="panel-h">Raw record entries <span class="sub">as typed by clinicians</span><span class="right live" id="live">Streaming</span></div>
@@ -354,7 +442,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
         <div class="panel">
           <div class="panel-h">Structured consumption events <span class="right"><button class="btn small" id="pause">Pause</button></span></div>
           <div class="events">
-            <table><thead><tr><th>Time</th><th>Medicine</th><th class="num">Qty</th><th>Condition</th><th>Clinic</th></tr></thead><tbody id="ev"></tbody></table>
+            <table><thead><tr><th>Time</th><th>Medicine</th><th class="num">Qty</th><th>Condition</th><th>Paid by</th></tr></thead><tbody id="ev"></tbody></table>
           </div>
         </div>
       </div>
@@ -362,126 +450,180 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
     </div>
   </section>
 
-  <!-- STEP 2 -->
+  <!-- STEP 2: FORECAST -->
   <section class="step" id="s2" aria-labelledby="h2">
     <div class="wrap">
       <div class="head">
-        <div><p class="count">Step 2 of 5</p><h1 id="h2">Metformin runs out in 14 days unless we act</h1></div>
-        <p class="lede">Savannah compares stock on hand with the forecast of daily use, built from prescription trends, clinic visit volumes and seasonal disease patterns.</p>
+        <div><p class="count">Step 2 of 6<span class="role hosp">Hospital view</span></p><h1 id="h2">Several medicines will run short this month</h1></div>
+        <p class="lede">Savannah compares stock on hand with forecast daily use, built from prescription trends, clinic volumes and seasonal disease patterns. It warns the pharmacist early and tracks whether each warning was acted on.</p>
       </div>
       <div class="alert" role="alert">
         <div>
           <div class="big" id="alertBig"></div>
-          <p>Diabetes and hypertension clinic visits are up 18% over the last three weeks, so daily Metformin use is climbing. The supplier needs 6 days to deliver, so the order has to go out by <b id="orderBy"></b>.</p>
+          <p>Respiratory infections are up 22% over three weeks as the rains start, so daily Amoxicillin use is climbing. Oxytocin for deliveries runs out two days later. The supplier needs 6 days to deliver, so both must be ordered by <b id="orderBy"></b>.</p>
         </div>
-        <button class="btn primary" data-go="3">Draft purchase order</button>
+        <button class="btn primary" data-go="3">Send stock request</button>
       </div>
       <div class="forecast">
         <div class="panel">
-          <div class="panel-h">Metformin 500 mg tablets <span class="sub">last 14 days and next 30 days</span></div>
+          <div class="panel-h">Amoxicillin 500 mg capsules <span class="sub">last 14 days and next 30 days</span></div>
           <div class="chart" id="chart"></div>
           <div class="legend"><span class="l-stock">Stock on hand (left axis)</span><span class="l-use">Daily use (right axis)</span><span class="l-gap">No stock</span></div>
         </div>
         <div class="panel">
-          <div class="panel-h">Days of stock left</div>
+          <div class="panel-h">Days of stock left <span class="sub">8 medicines tracked here</span></div>
           <table class="cover"><tbody id="cover"></tbody></table>
-          <div class="drivers"><b>Forecast inputs:</b> 30-day prescription velocity, outpatient queue volumes, county diabetes and hypertension trends, supplier lead times.</div>
+          <div class="netnote"><b>Not just this hospital.</b> 4 other hospitals in the Savannah network will run short of Amoxicillin within 21 days, and 4 are short of Oxytocin. <button class="link" data-go="4">See the network</button></div>
+        </div>
+      </div>
+
+      <h2 class="sec">Were the warnings acted on?</h2>
+      <div class="panel">
+        <div class="scroll-x">
+          <table class="followup">
+            <thead><tr><th>Warned</th><th>Medicine</th><th>What happened</th><th>Outcome</th><th>Cause</th></tr></thead>
+            <tbody id="followup"></tbody>
+          </table>
+        </div>
+        <div class="fu-sum">
+          <div><div class="n">18 of 22</div>warnings acted on in time this quarter</div>
+          <div><div class="n">4 stockouts</div>2 from no cash to pay, 1 late supplier, 1 warning missed</div>
+          <div><div class="n">Fixed</div>Credit line for cash gaps, a backup supplier, SMS alerts to the pharmacist</div>
         </div>
       </div>
       <div class="pager"></div>
     </div>
   </section>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3: STOCK REQUEST + CREDIT -->
   <section class="step" id="s3" aria-labelledby="h3">
     <div class="wrap">
       <div class="head">
-        <div><p class="count">Step 3 of 5</p><h1 id="h3">The order is drafted before anyone has to notice</h1></div>
-        <p class="lede">Savannah sets the quantity from the forecast, the supplier's delivery time and price breaks. The pharmacist reviews and approves it, and no emergency buying is needed.</p>
+        <div><p class="count">Step 3 of 6<span class="role hosp">Hospital view</span></p><h1 id="h3">One stock request, paid for with Savannah credit</h1></div>
+        <p class="lede">Savannah drafts the request with the right quantities. The pharmacist approves it and sends it to Savannah, which buys the stock. The hospital repays from its cash takings, so it never waits on insurance payments to restock.</p>
       </div>
-      <div class="po-wrap">
-        <div class="panel po">
-          <div class="po-head">
-            <div><h2>Purchase order <span style="white-space:nowrap">PO-2026-1147</span></h2><span class="status" id="poStatus">Waiting for pharmacist approval</span></div>
-            <div class="meta">Drafted by Savannah<br><span id="poDate"></span></div>
+      <div class="req-wrap">
+        <div class="panel doc">
+          <div class="doc-head">
+            <div><h2>Stock request <span class="nowrap">SR-2026-1147</span></h2><span class="status" id="reqStatus">Waiting for pharmacist approval</span></div>
+            <div class="meta">Drafted by Savannah<br><span id="reqDate"></span></div>
           </div>
           <dl>
-            <dt>Supplier</dt><dd>Regional distributor A (6-day delivery, 96% on time)</dd>
-            <dt>Deliver to</dt><dd>Main pharmacy store, Level 4 hospital, Kiambu</dd>
-            <dt>Expected delivery</dt><dd id="poEta"></dd>
+            <dt>From</dt><dd>Acacia Ridge Hospital, Kiambu (Level 4)</dd>
+            <dt>To</dt><dd>Savannah, for pooled buying</dd>
+            <dt>Needed by</dt><dd id="reqEta"></dd>
           </dl>
-          <table>
-            <thead><tr><th>Item</th><th class="num">Quantity</th><th class="num">Price per 1,000</th><th class="num">Amount</th></tr></thead>
-            <tbody>
-              <tr><td>Metformin 500 mg tablets<br><span class="meta">Cartons of 1,000</span></td><td class="num" id="poQty"></td><td class="num" id="poPrice"></td><td class="num" id="poAmt"></td></tr>
-              <tr class="total"><td colspan="3">Total</td><td class="num" id="poTotal"></td></tr>
-            </tbody>
-          </table>
+          <div class="scroll-x">
+            <table>
+              <thead><tr><th>Medicine</th><th class="num">Quantity</th><th class="num">Buying alone</th><th class="num">Through Savannah</th></tr></thead>
+              <tbody id="reqLines"></tbody>
+            </table>
+          </div>
+          <div class="saveline" id="reqSave"></div>
           <div class="actions">
-            <button class="btn primary" id="approve">Approve order</button>
-            <button class="link" data-go="4">Pool with other hospitals for a lower price</button>
+            <button class="btn primary" id="approve">Approve and send to Savannah</button>
           </div>
         </div>
-        <div class="panel">
-          <div class="panel-h">How the quantity was set</div>
-          <div class="calc" id="calc"></div>
+        <div class="side-stack">
+          <div class="panel">
+            <div class="panel-h">Paid with Savannah credit</div>
+            <div class="credit" id="credit"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-h">How the Amoxicillin quantity was set</div>
+            <div class="calc" id="calc"></div>
+          </div>
         </div>
       </div>
       <div class="pager"></div>
     </div>
   </section>
 
-  <!-- STEP 4 -->
+  <!-- STEP 4: NETWORK (ADMIN) -->
   <section class="step" id="s4" aria-labelledby="h4">
     <div class="wrap">
       <div class="head">
-        <div><p class="count">Step 4 of 5</p><h1 id="h4">Five hospitals buying together get distributor pricing</h1></div>
-        <p class="lede">Savannah sees every facility's forecast, so it can combine orders due in the same week into one bulk purchase and pass the discount back to each hospital.</p>
+        <div><p class="count">Step 4 of 6<span class="role adm">Savannah admin view</span></p><h1 id="h4">Across the network, the same medicines run short</h1></div>
+        <p class="lede">Savannah's team sees every connected hospital at once: what is already out of stock, what is about to run out and which requests can be combined into one bigger order.</p>
       </div>
-      <div class="gpo">
+      <div class="tally" id="netTally"></div>
+      <div class="net">
         <div class="panel">
-          <div class="panel-h">Metformin 500 mg orders due this week <span class="sub">5 pilot facilities</span></div>
-          <table class="fac"><thead><tr><th>Facility</th><th class="num">Tablets</th><th class="num">Price alone</th><th class="num">Price pooled</th></tr></thead><tbody id="fac"></tbody></table>
+          <div class="panel-h">Days of stock left, by hospital</div>
+          <div class="scroll-x"><table class="heat" id="heat"></table></div>
+          <div class="heat-legend"><span class="o">Out of stock</span><span class="l">Under 15 days</span><span class="w">15 to 21 days</span><span>Over 21 days</span></div>
         </div>
-        <div class="panel pool">
-          <div class="tiers" id="tiers"></div>
-          <div class="pool-bar" id="poolBar"></div>
-          <div class="save" id="save"></div>
-          <div class="actions"><button class="btn primary" id="poolBtn">Pool orders</button></div>
+        <div class="panel">
+          <div class="panel-h">Pooling opportunities this week</div>
+          <ul class="opps" id="opps"></ul>
         </div>
       </div>
       <div class="pager"></div>
     </div>
   </section>
 
-  <!-- STEP 5 -->
+  <!-- STEP 5: POOLED BUYING (ADMIN) -->
   <section class="step" id="s5" aria-labelledby="h5">
     <div class="wrap">
       <div class="head">
-        <div><p class="count">Step 5 of 5</p><h1 id="h5">What the hospital gains in one quarter</h1></div>
-        <p class="lede">The view a hospital's finance director and medical director see: money no longer lost to emergency buying and expired stock, and patients who get their medicine on site.</p>
+        <div><p class="count">Step 5 of 6<span class="role adm">Savannah admin view</span></p><h1 id="h5">Five requests become one order at a special price</h1></div>
+        <p class="lede">Savannah combines the Amoxicillin requests, asks distributors to quote and uses the combined volume to win a special price. Hospitals pay well below retail, and Savannah keeps a small share of the 33% margin it cut out.</p>
+      </div>
+      <div class="pool-wrap">
+        <div class="panel">
+          <div class="panel-h">Amoxicillin 500 mg requests <span class="sub">5 hospitals, capsules</span></div>
+          <div class="scroll-x">
+            <table id="poolTable"></table>
+          </div>
+          <div class="bigsave" id="bigsave"><div class="n pending">$0</div><p class="pending">Pool the requests to see what each hospital saves.</p></div>
+        </div>
+        <div class="panel">
+          <div class="pool">
+            <h3>Combined volume</h3>
+            <div class="pool-bar" id="poolBar"></div>
+            <div class="actions" style="margin-top:0"><button class="btn primary" id="poolBtn">Pool and negotiate</button></div>
+          </div>
+          <div class="neg">
+            <h3>Distributor quotes, per 1,000 capsules</h3>
+            <ul class="quotes" id="quotes"></ul>
+          </div>
+          <div class="panel-h" style="border-top:1px solid var(--line)">Where the 33% margin goes <span class="sub">per 1,000 capsules</span></div>
+          <div class="ladder" id="ladder"></div>
+        </div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- STEP 6: IMPACT -->
+  <section class="step" id="s6" aria-labelledby="h6">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="count">Step 6 of 6<span class="role hosp">Hospital view, all hospitals</span></p><h1 id="h6">What hospitals save in one quarter</h1></div>
+        <p class="lede">Each hospital's finance director and medical director see their own savings. Across the network, money that used to go to retail margins, emergency buying and expired stock stays with the hospitals.</p>
       </div>
       <div class="kpis">
-        <div class="kpi"><div class="k">Money recovered this quarter</div><div class="v" id="kSaved">$0</div><div class="c">Updates as each order closes</div></div>
-        <div class="kpi"><div class="k">Prescriptions filled in-house</div><div class="v safe" id="kFill">0%</div><div class="c">Up from 58% before Savannah</div></div>
-        <div class="kpi"><div class="k">Batches expired on the shelf</div><div class="v" id="kExp">0</div><div class="c">Last 90 days, against 37 batches worth $40,100 in the same quarter last year</div></div>
+        <div class="kpi"><div class="k">Saved by 6 hospitals this quarter</div><div class="v safe" id="kSaved">$0</div><div class="c">Updates as each pooled order closes</div></div>
+        <div class="kpi"><div class="k">Prescriptions filled in-house</div><div class="v" id="kFill">0%</div><div class="c">Network average, up from 58% before Savannah</div></div>
+        <div class="kpi"><div class="k">Expired stock this quarter</div><div class="v" id="kExp">$0</div><div class="c">Down from $236,800 in the same quarter last year</div></div>
       </div>
       <div class="impact">
         <div class="panel">
-          <div class="panel-h">Prescriptions filled in-house <span class="sub">weekly, since go-live</span></div>
-          <div class="chart" id="fillChart"></div>
+          <div class="panel-h">Savings by hospital <span class="sub">this quarter</span></div>
+          <div class="scroll-x"><table class="hbars" id="hbars"></table></div>
         </div>
-        <div class="panel">
-          <div class="panel-h">Where the money came from <span class="sub">this quarter</span></div>
-          <table><tbody>
-            <tr><td>Emergency purchases avoided</td><td class="num" id="r1"></td></tr>
-            <tr><td>Group buying discounts</td><td class="num">$12,860</td></tr>
-            <tr><td>Expired stock avoided</td><td class="num">$38,400</td></tr>
-            <tr class="sum"><td>Total recovered</td><td class="num" id="r2"></td></tr>
-          </tbody></table>
+        <div class="side-stack">
+          <div class="panel">
+            <div class="panel-h">Where the savings came from</div>
+            <table><tbody id="sources"></tbody></table>
+          </div>
+          <div class="panel">
+            <div class="panel-h">Prescriptions filled in-house <span class="sub">network, weekly</span></div>
+            <div class="chart" id="fillChart"></div>
+          </div>
         </div>
       </div>
-      <p class="meta" style="margin-top:24px;max-width:75ch">All figures on these screens are simulated for demonstration. They follow the unit economics in Savannah's concept note for a mid-sized hospital with about $800k in annual revenue.</p>
+      <p class="meta" style="margin-top:24px;max-width:80ch">All figures are simulated for demonstration and follow the unit economics in Savannah's concept note. Jabali Hospital and Mvuli Coast Hospital joined this month and are not counted yet.</p>
       <div class="pager"></div>
     </div>
   </section>
@@ -500,16 +642,31 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:24p
 const $ = id => document.getElementById(id);
 const fmt = n => Math.round(n).toLocaleString('en-US');
 const usd = (n, d = 2) => '$' + n.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
+const usd0 = n => '$' + fmt(n);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const TODAY = new Date();
 const dateAt = t => { const d = new Date(TODAY); d.setDate(d.getDate() + t); return d; };
 const dLabel = t => dateAt(t).toLocaleDateString('en-GB', {day: 'numeric', month: 'short'});
+const dLong = t => dateAt(t).toLocaleDateString('en-GB', {weekday: 'long', day: 'numeric', month: 'long'});
 let seed = 7;
 const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const pick = arr => arr[Math.floor(rnd() * arr.length)];
 const C = {ink: '#0E2841', ink3: '#5F6E81', line: 'rgba(14,40,65,.10)', accent: '#0A5BB5', use: '#B7791F', alert: '#B4232F', alertBg: '#FCEEEF', safe: '#1C6E4A'};
 
-/* ---------- Forecast model (shared by steps 2-4) ---------- */
+/* ---------- Fictional hospital network ---------- */
+const HOSP = {
+  acacia:   {n: 'Acacia Ridge Hospital', s: 'Acacia Ridge', r: 'Kiambu', l: 4},
+  mothers:  {n: 'Mothers Care Hospital', s: 'Mothers Care', r: 'Kakamega', l: 4},
+  tumaini:  {n: 'Tumaini Rural Hospital', s: 'Tumaini Rural', r: 'Narok', l: 4},
+  jabali:   {n: 'Jabali Hospital', s: 'Jabali', r: 'Machakos', l: 4},
+  mvuli:    {n: 'Mvuli Coast Hospital', s: 'Mvuli Coast', r: 'Kilifi', l: 4},
+  rift:     {n: 'Rift Highlands Referral Hospital', s: 'Rift Highlands', r: 'Nakuru', l: 5},
+  lakeview: {n: 'Lakeview General Hospital', s: 'Lakeview General', r: 'Kisumu', l: 5},
+  kilimani: {n: 'Kilimani Heights National Referral Hospital', s: 'Kilimani Heights', r: 'Nairobi', l: 6},
+};
+const NET_ORDER = ['acacia', 'mothers', 'tumaini', 'jabali', 'mvuli', 'rift', 'lakeview', 'kilimani'];
+
+/* ---------- Amoxicillin forecast model (steps 2-3) ---------- */
 const STOCK0 = 42000, LEAD = 6, COVER = 30, SAFETY_DAYS = 5, CARTON = 1000;
 const rate = t => 2700 + 40 * Math.min(t, 21);
 const cum = n => { let s = 0; for (let t = 0; t < n; t++) s += rate(t); return s; };
@@ -519,18 +676,19 @@ const stockoutX = stockoutDay + left / rate(stockoutDay);
 const orderByDay = stockoutDay - LEAD - 3;
 const need = cum(LEAD + COVER);
 const safety = SAFETY_DAYS * rate(LEAD + COVER);
-const orderQty = Math.ceil((need - STOCK0 + safety) / CARTON) * CARTON;
-const TIERS = [
-  {name: 'Single hospital', min: 0, price: 11.40},
-  {name: 'Tier 2', min: 100000, price: 10.70},
-  {name: 'Tier 1 distributor', min: 250000, price: 10.03},
-];
-const SPOT = 17.10;
-const priceFor = q => TIERS.filter(t => q >= t.min).pop().price;
+const amoxQty = Math.ceil((need - STOCK0 + safety) / CARTON) * CARTON;
 const hist = [];
 for (let t = -14; t < 0; t++) hist.push({t, use: 2290 + (t + 14) * 28 + (rnd() - .5) * 220});
 let s0 = STOCK0;
 for (let i = hist.length - 1; i >= 0; i--) { s0 += hist[i].use; hist[i].stock = s0; }
+
+/* ---------- Pricing: retail vs Savannah ---------- */
+const RETAIL_PER_1000 = 36.00;                   // what a hospital pays buying alone
+const DIST_PER_1000 = RETAIL_PER_1000 / 1.33;     // distributor price before the 33% retail margin
+const SPECIAL_PER_1000 = +(DIST_PER_1000 * 0.95).toFixed(2); // pooled special price (5% below distributor)
+const HOSP_DISCOUNT = 0.20;                       // hospitals pay 20% below retail
+const HOSP_PER_1000 = RETAIL_PER_1000 * (1 - HOSP_DISCOUNT);
+const SAV_PER_1000 = HOSP_PER_1000 - SPECIAL_PER_1000;
 
 /* ---------- Navigation ---------- */
 const steps = [...document.querySelectorAll('.step')];
@@ -545,6 +703,7 @@ function go(i) {
   i = Math.max(0, Math.min(LAST, i));
   if (i === cur) return;
   cur = i;
+  $('toast').classList.remove('show');
   steps.forEach((s, j) => s.classList.toggle('on', j === i));
   navBtns.forEach((b, j) => { b.removeAttribute('aria-current'); if (j + 1 === i) b.setAttribute('aria-current', 'step'); b.classList.toggle('done', j + 1 < i); });
   document.querySelectorAll('[data-dir="1"]').forEach(b => b.textContent = i === LAST ? 'Back to start' : 'Next step');
@@ -565,54 +724,74 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') go(cur + 1);
   if (e.key === 'ArrowLeft') go(cur - 1);
 });
-const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2600); };
+const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2800); };
+function countTo(el, end, dur, f) {
+  if (reduced) { el.textContent = f(end); return; }
+  const t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur); el.textContent = f(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
 
 /* ---------- Intro grid ---------- */
 const cells = [];
 for (let i = 0; i < 100; i++) { const c = document.createElement('i'); $('rxGrid').append(c); cells.push(c); }
-// which cells are misses: spread across the grid, deterministic
-const missIdx = new Set(Array.from({length: 42}, (_, k) => 58 + k)); // filled first, then the 42 misses
 function playGrid() {
   cells.forEach((c, i) => {
     c.className = '';
-    const apply = () => { c.className = missIdx.has(i) ? 'miss' : 'fill'; };
+    const apply = () => { c.className = i >= 58 ? 'miss' : 'fill'; };
     reduced ? apply() : setTimeout(apply, 250 + i * 14);
   });
 }
 
-/* ---------- Step 1: ingestion ---------- */
+/* ---------- Step 1: conditions + live feed ---------- */
+const CONDS = [
+  ['Respiratory infections', 3480, 22, 'Amoxicillin 500 mg, three times a day for 7 days', fmt(amoxQty + 4000) + ' capsules'],
+  ['Antenatal care', 1920, 4, 'Iron and folic acid, once a day', '61,000 tablets'],
+  ['Hypertension', 1610, 6, 'Amlodipine 5 mg, once a day', '48,000 tablets'],
+  ['Type 2 diabetes', 1180, 9, 'Metformin 500 mg, twice a day', '71,000 tablets'],
+  ['Pain (injury, after surgery)', 960, 3, 'Paracetamol, diclofenac', '38,000 tablets'],
+  ['Asthma', 640, 15, 'Salbutamol inhaler', '260 inhalers'],
+  ['Deliveries and postnatal care', 410, 3, 'Oxytocin 10 IU after birth', '1,150 ampoules'],
+  ['Surgery, before and after', 380, 2, 'Ceftriaxone 1 g to prevent infection', '1,400 vials'],
+  ['Nausea and vomiting', 290, 5, 'Ondansetron 4 mg after surgery or in pregnancy', '620 ampoules'],
+];
+$('conds').innerHTML = CONDS.map(([c, n, ch, tx, need]) => `<tr><td>${c}</td><td class="num">${fmt(n)}</td><td class="num ${ch >= 10 ? 'up' : ''}">+${ch}%</td><td class="tx">${tx}</td><td class="num">${need}</td></tr>`).join('');
+
 const DRUGS = [
-  {name: 'Metformin 500 mg', raw: 'metformin 500mg', dx: 'E11.9', cond: 'Type 2 diabetes', c: 'dm', sigs: [['1x2', 2], ['2x2', 4], ['1 bd', 2]], unit: 'tabs', w: 5},
-  {name: 'Amlodipine 5 mg', raw: 'amlodipine 5mg', dx: 'I10', cond: 'Hypertension', c: 'htn', sigs: [['1x1', 1], ['1 od', 1]], unit: 'tabs', w: 4},
-  {name: 'Losartan 50 mg', raw: 'losartan 50mg', dx: 'I10', cond: 'Hypertension', c: 'htn', sigs: [['1x1', 1], ['1 od', 1]], unit: 'tabs', w: 3},
-  {name: 'Insulin glargine 100 IU/ml', raw: 'ins glargine 100iu/ml', dx: 'E11.65', cond: 'Type 2 diabetes', c: 'dm', pens: true, w: 2},
-  {name: 'Soluble insulin 100 IU/ml', raw: 'sol insulin 100iu/ml', dx: 'E10.9', cond: 'Type 1 diabetes', c: 'dm', pens: true, w: 1},
-  {name: 'Amoxicillin 500 mg', raw: 'amoxil 500mg', dx: 'J02.9', cond: 'Acute infection', c: '', sigs: [['1x3', 3]], unit: 'caps', w: 1, days: [5, 7]},
+  {name: 'Amoxicillin 500 mg', raw: 'amoxil 500mg', dx: ['J18.9', 'J20.9'], cond: 'Respiratory infection', sig: () => ['1x3 x7/7', 21], unit: 'caps', clinic: ['OPD', 'Casualty', 'Paeds'], w: 5},
+  {name: 'Iron and folic acid', raw: 'ifas', dx: ['Z34.9'], cond: 'Antenatal care', sig: () => ['1 od x30/7', 30], unit: 'tabs', clinic: ['MCH'], w: 3},
+  {name: 'Amlodipine 5 mg', raw: 'amlodipine 5mg', dx: ['I10'], cond: 'Hypertension', sig: () => ['1 od x30/7', 30], unit: 'tabs', clinic: ['MOPC'], w: 2},
+  {name: 'Metformin 500 mg', raw: 'metformin 500mg', dx: ['E11.9'], cond: 'Type 2 diabetes', sig: () => ['1x2 x30/7', 60], unit: 'tabs', clinic: ['MOPC'], w: 2},
+  {name: 'Paracetamol 500 mg', raw: 'pcm 500mg', dx: ['R52'], cond: 'Pain', sig: () => ['2 tds x5/7', 30], unit: 'tabs', clinic: ['OPD', 'Casualty'], w: 2},
+  {name: 'Diclofenac 50 mg', raw: 'diclo 50mg', dx: ['R52'], cond: 'Pain after surgery', sig: () => ['1 bd x5/7', 10], unit: 'tabs', clinic: ['Ward 3'], w: 1},
+  {name: 'Salbutamol inhaler', raw: 'salbutamol inh 100mcg', dx: ['J45.9'], cond: 'Asthma', sig: () => ['2 puffs prn', 1], unit: 'inhaler', clinic: ['OPD', 'Casualty'], w: 1},
+  {name: 'Oxytocin 10 IU', raw: 'oxytocin 10iu im', dx: ['O80'], cond: 'Delivery', sig: () => ['stat', 1], unit: 'amp', clinic: ['Labour'], w: 1},
+  {name: 'Ceftriaxone 1 g', raw: 'ceftriaxone 1g iv', dx: ['K35.8'], cond: 'Before surgery', sig: () => ['stat pre-op', 1], unit: 'vial', clinic: ['Theatre'], w: 1},
+  {name: 'Ondansetron 4 mg', raw: 'ondansetron 4mg iv', dx: ['R11.2'], cond: 'Nausea and vomiting', sig: () => ['stat', 1], unit: 'amp', clinic: ['Theatre', 'MCH'], w: 1},
 ];
 const pool = DRUGS.flatMap(d => Array(d.w).fill(d));
-const CLINICS = [['MOPC', 'Medical clinic'], ['OPD', 'Outpatients'], ['DM-CL', 'Diabetes clinic'], ['W4', 'Ward 4']];
 const DOCS = ['K.O.', 'A.W.', 'J.M.', 'P.N.', 'S.K.', 'M.A.'];
 let clock = 9 * 3600 + 14 * 60, rx = 88213, timer = null, paused = false;
-const tally = {rx: 286, met: 15840, amlo: 6120, ins: 41};
+const tally = {patients: 612, rx: 486, cash: 311};
 const hms = s => [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60].map(v => String(v).padStart(2, '0')).join(':');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 function renderTally() {
+  const cashPct = Math.round(tally.cash / tally.rx * 100);
   $('tally').innerHTML = [
-    ['Prescriptions today', fmt(tally.rx)], ['Metformin tablets', fmt(tally.met)],
-    ['Amlodipine tablets', fmt(tally.amlo)], ['Insulin pens', fmt(tally.ins)],
+    ['Patients seen today', fmt(tally.patients)], ['Prescriptions today', fmt(tally.rx)],
+    ['Paid in cash', cashPct + '%<small>' + fmt(tally.cash) + ' prescriptions</small>'], ['Paid by SHA or insurance', (100 - cashPct) + '%'],
   ].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
 }
 function makeEvent() {
   const d = pick(pool);
-  const [clinicCode, clinic] = d.c === 'dm' && rnd() < .5 ? CLINICS[2] : pick(CLINICS.filter(c => c[0] !== 'DM-CL'));
-  clock += 20 + Math.floor(rnd() * 70);
+  clock += 15 + Math.floor(rnd() * 50);
   rx += 1 + Math.floor(rnd() * 3);
-  let sig, qty, unit;
-  if (d.pens) { const p = pick([3, 5, 5, 10]); const iu = pick([10, 14, 18, 20, 24]); sig = `${iu}iu ${pick(['nocte', 'mane', 'od'])} x${p}pens`; qty = p; unit = 'pens'; }
-  else { const [sg, perDay] = pick(d.sigs); const days = d.days ? pick(d.days) : pick([14, 30, 30, 30, 60]); sig = `${sg} x${days}/7`; qty = perDay * days; unit = d.unit; }
+  const [sig, qty] = d.sig();
+  const clinic = pick(d.clinic);
+  const cash = rnd() < .64;
   const pt = String(1000 + Math.floor(rnd() * 8999));
-  const raw = `${hms(clock)} ${clinicCode} RX#${rx} pt:****${pt} dx:${d.dx} <span class="q">"${esc(d.raw + ' ' + sig)}"</span> dr:${pick(DOCS)}`;
-  return {d, raw, qty, unit, clinic, time: hms(clock).slice(0, 5)};
+  const raw = `${hms(clock)} ${clinic.toUpperCase().replace(' ', '')} RX#${rx} pt:****${pt} dx:${pick(d.dx)} <span class="q">"${esc(d.raw + ' ' + sig)}"</span> pay:${cash ? 'CASH' : 'SHA'} dr:${pick(DOCS)}`;
+  return {d, raw, qty, cash, time: hms(clock).slice(0, 5)};
 }
 function pushEvent(animate = true) {
   const e = makeEvent();
@@ -620,14 +799,11 @@ function pushEvent(animate = true) {
   line.innerHTML = e.raw; if (animate) line.className = 'new';
   $('raw').prepend(line);
   const tr = document.createElement('tr'); if (animate) tr.className = 'new';
-  tr.innerHTML = `<td>${e.time}</td><td>${e.d.name}</td><td class="num">${fmt(e.qty)} ${e.unit}</td><td><span class="cond ${e.d.c}">${e.d.cond}</span></td><td>${e.clinic}</td>`;
+  tr.innerHTML = `<td>${e.time}</td><td>${e.d.name}</td><td class="num">${fmt(e.qty)} ${e.d.unit}</td><td>${e.d.cond}</td><td><span class="pay ${e.cash ? 'cash' : ''}">${e.cash ? 'Cash' : 'SHA'}</span></td>`;
   $('ev').prepend(tr);
   while ($('raw').children.length > 30) $('raw').lastChild.remove();
   while ($('ev').children.length > 16) $('ev').lastChild.remove();
-  tally.rx++;
-  if (e.d.raw.startsWith('metformin')) tally.met += e.qty;
-  if (e.d.raw.startsWith('amlodipine')) tally.amlo += e.qty;
-  if (e.d.pens) tally.ins += e.qty;
+  if (animate) { tally.rx++; if (e.cash) tally.cash++; if (rnd() < .6) tally.patients++; }
   renderTally();
 }
 function startStream() { if (!timer && !paused) timer = setInterval(() => { if (cur === 1) pushEvent(); }, 1300); }
@@ -641,7 +817,7 @@ $('pause').onclick = () => {
 for (let i = 0; i < 14; i++) pushEvent(false);
 renderTally();
 
-/* ---------- Step 2: forecast chart ---------- */
+/* ---------- Step 2: forecast chart, cover list, follow-up ---------- */
 function forecastChart() {
   const W = 760, H = 340, m = {l: 64, r: 76, t: 24, b: 40};
   const x0 = -14, x1 = 30, yMax = 80000, uMax = 4000;
@@ -673,121 +849,183 @@ function forecastChart() {
   g += `<polyline points="${fp.join(' ')}" fill="none" stroke="${C.ink}" stroke-width="2.5" stroke-dasharray="6 4"/>`;
   g += `<line x1="${X(0)}" x2="${X(0)}" y1="${m.t}" y2="${H - m.b}" stroke="${C.ink}" stroke-width="1"/>`;
   g += `<circle cx="${X(0)}" cy="${Y(STOCK0)}" r="5" fill="${C.ink}"/>`;
-  g += T(X(0) + 10, Y(STOCK0) - 12, fmt(STOCK0) + ' tablets in stock', `fill="${C.ink}" font-weight="600"`);
+  g += T(X(0) + 10, Y(STOCK0) - 12, fmt(STOCK0) + ' capsules in stock', `fill="${C.ink}" font-weight="600"`);
   g += `<circle cx="${X(stockoutX)}" cy="${Y(0)}" r="5.5" fill="${C.alert}"/>`;
   g += T(X(stockoutX) + 10, Y(0) - 10, 'Runs out ' + dLabel(stockoutDay), `fill="${C.alert}" font-weight="600"`);
   g += `<line x1="${X(orderByDay)}" x2="${X(orderByDay)}" y1="${m.t}" y2="${H - m.b}" stroke="${C.safe}" stroke-dasharray="3 3"/>`;
   g += T(X(orderByDay) + 8, m.t + 14, 'Order by ' + dLabel(orderByDay), `fill="${C.safe}" font-weight="600"`);
   const mid = m.t + (H - m.t - m.b) / 2;
-  g += T(16, mid, 'Tablets in stock', `fill="${C.ink3}" text-anchor="middle" transform="rotate(-90 16 ${mid})"`);
-  g += T(W - 10, mid, 'Tablets used per day', `fill="#8A5A00" text-anchor="middle" transform="rotate(90 ${W - 10} ${mid})"`);
-  $('chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Metformin stock falls from ${fmt(STOCK0)} tablets today to zero on ${dLabel(stockoutDay)} as daily use rises from ${fmt(rate(0))} to ${fmt(rate(21))} tablets.">${g}</svg>`;
+  g += T(16, mid, 'Capsules in stock', `fill="${C.ink3}" text-anchor="middle" transform="rotate(-90 16 ${mid})"`);
+  g += T(W - 10, mid, 'Capsules used per day', `fill="#8A5A00" text-anchor="middle" transform="rotate(90 ${W - 10} ${mid})"`);
+  $('chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Amoxicillin stock falls from ${fmt(STOCK0)} capsules today to zero on ${dLabel(stockoutDay)} as daily use rises from ${fmt(rate(0))} to ${fmt(rate(21))} capsules.">${g}</svg>`;
 }
 const COVERS = [
-  {n: 'Metformin 500 mg', d: stockoutDay, s: 'act'},
-  {n: 'Insulin glargine', d: 19, s: 'watch'},
-  {n: 'Soluble insulin', d: 23, s: 'watch'},
-  {n: 'Losartan 50 mg', d: 34, s: 'ok'},
-  {n: 'Amlodipine 5 mg', d: 41, s: 'ok'},
-  {n: 'Amoxicillin 500 mg', d: 52, s: 'ok'},
+  ['Amoxicillin 500 mg', stockoutDay, 'act'], ['Oxytocin 10 IU', 16, 'act'], ['Salbutamol inhaler', 19, 'watch'], ['Ondansetron 4 mg', 21, 'watch'],
+  ['Ceftriaxone 1 g', 26, 'watch'], ['Iron and folic acid', 38, 'ok'], ['Amlodipine 5 mg', 44, 'ok'], ['Metformin 500 mg', 51, 'ok'],
 ];
-const stTxt = {act: 'Order now', watch: 'Watch', ok: 'Fine'};
+const stTxt = {act: 'Order now', watch: 'Add to order', ok: 'Fine'};
 const stCol = {act: C.alert, watch: C.use, ok: C.safe};
-$('cover').innerHTML = COVERS.map(c => `<tr><td>${c.n}</td><td class="num"><span class="bar"><i style="width:${Math.min(100, c.d / 60 * 100)}%;background:${stCol[c.s]}"></i></span>${c.d} days</td><td><span class="st ${c.s}">${stTxt[c.s]}</span></td></tr>`).join('');
-$('alertBig').textContent = `Metformin 500 mg runs out in ${stockoutDay} days, on ${dateAt(stockoutDay).toLocaleDateString('en-GB', {weekday: 'long', day: 'numeric', month: 'long'})}`;
+$('cover').innerHTML = COVERS.map(([n, d, s]) => `<tr><td>${n}</td><td class="num"><span class="bar"><i style="width:${Math.min(100, d / 60 * 100)}%;background:${stCol[s]}"></i></span>${d} days</td><td><span class="st ${s}">${stTxt[s]}</span></td></tr>`).join('');
+$('alertBig').textContent = `Amoxicillin 500 mg runs out in ${stockoutDay} days, on ${dLong(stockoutDay)}`;
 $('orderBy').textContent = dLabel(orderByDay);
 forecastChart();
+const FOLLOW = [
+  [-24, 'Oxytocin 10 IU', 'Ordered the same day', 'No stockout', true, 'None'],
+  [-39, 'Salbutamol inhaler', 'Not ordered', 'Out of stock for 6 days', false, 'No cash to pay the supplier while waiting on SHA payments'],
+  [-51, 'Ceftriaxone 1 g', 'Ordered on time', 'Out of stock for 3 days', false, 'Supplier delivered 5 days late'],
+  [-63, 'Paracetamol 500 mg', 'Ordered 9 days after the warning', 'Out of stock for 2 days', false, 'Pharmacist did not see the warning'],
+  [-70, 'Iron and folic acid', 'Not ordered', 'Out of stock for 4 days', false, 'No cash to pay the supplier'],
+  [-77, 'Metformin 500 mg', 'Ordered the same day', 'No stockout', true, 'None'],
+];
+$('followup').innerHTML = FOLLOW.map(([t, m, a, o, good, c]) => `<tr><td class="nowrap">${dLabel(t)}</td><td class="nowrap">${m}</td><td>${a}</td><td><span class="outcome ${good ? 'good' : 'bad'}">${o}</span></td><td>${c === 'None' ? '<span class="meta">None</span>' : c}</td></tr>`).join('');
 
-/* ---------- Step 3: purchase order ---------- */
-const singlePrice = priceFor(orderQty);
-const cartons = orderQty / CARTON;
-$('poDate').textContent = TODAY.toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'}) + ', 09:32';
-$('poEta').textContent = dateAt(LEAD).toLocaleDateString('en-GB', {weekday: 'long', day: 'numeric', month: 'long'});
-$('poQty').textContent = fmt(orderQty);
-$('poPrice').textContent = usd(singlePrice);
-$('poAmt').textContent = usd(cartons * singlePrice);
-$('poTotal').textContent = usd(cartons * singlePrice);
+/* ---------- Step 3: stock request + credit ---------- */
+const LINES = [
+  {m: 'Amoxicillin 500 mg capsules', q: amoxQty, unit: 'capsules', retail: RETAIL_PER_1000 / 1000},
+  {m: 'Oxytocin 10 IU injection', q: 1200, unit: 'ampoules', retail: 0.60},
+  {m: 'Salbutamol inhaler 100 mcg', q: 240, unit: 'inhalers', retail: 3.20},
+  {m: 'Ondansetron 4 mg injection', q: 600, unit: 'ampoules', retail: 0.45},
+];
+let retailTotal = 0, savTotal = 0;
+$('reqLines').innerHTML = LINES.map(l => {
+  const r = l.q * l.retail, s = r * (1 - HOSP_DISCOUNT);
+  retailTotal += r; savTotal += s;
+  return `<tr><td>${l.m}</td><td class="num">${fmt(l.q)}<br><span class="meta">${l.unit}</span></td><td class="num"><span class="strike">${usd(r)}</span></td><td class="num">${usd(s)}</td></tr>`;
+}).join('') + `<tr class="total"><td colspan="2">Total</td><td class="num"><span class="strike">${usd(retailTotal)}</span></td><td class="num">${usd(savTotal)}</td></tr>`;
+$('reqSave').textContent = `The hospital saves ${usd(retailTotal - savTotal)} (${Math.round(HOSP_DISCOUNT * 100)}%) on this request compared with buying alone.`;
+$('reqDate').textContent = TODAY.toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'}) + ', 09:32';
+$('reqEta').textContent = dLong(orderByDay + LEAD);
+const CREDIT_LIMIT = 40000, CREDIT_USED = 11250, CASH_PER_DAY = 1850;
+const avail = CREDIT_LIMIT - CREDIT_USED - savTotal;
+$('credit').innerHTML = `
+  <div class="meta">Available after this request</div>
+  <div class="big">${usd0(avail)} <span class="meta">of ${usd0(CREDIT_LIMIT)}</span></div>
+  <div class="meter"><i class="used" style="width:${CREDIT_USED / CREDIT_LIMIT * 100}%"></i><i class="this" style="width:${savTotal / CREDIT_LIMIT * 100}%"></i></div>
+  <div class="meter-legend"><span class="u">Already used ${usd0(CREDIT_USED)}</span><span class="t">This request ${usd0(savTotal)}</span><span class="a">Available</span></div>
+  <p>64% of this hospital's prescriptions are paid in cash. Pharmacy cash takings average ${usd0(CASH_PER_DAY)} a day, so this request is repaid in about ${Math.ceil(savTotal / CASH_PER_DAY)} days of takings, well inside the 30-day terms.</p>
+  <div class="compare">
+    <div class="a"><div class="h">With Savannah credit</div>Stock arrives in ${LEAD} days and the hospital repays from cash takings.</div>
+    <div class="b"><div class="h">Without credit</div>The order waits 60 to 90 days for SHA payments. That caused September's Salbutamol stockout.</div>
+  </div>`;
 let gapTabs = -left; for (let t = stockoutDay; t < stockoutDay + LEAD; t++) gapTabs += rate(t);
-const patientsTurned = Math.round(gapTabs / 60);
 $('calc').innerHTML = `
-  <h3>Quantity</h3>
-  <div class="row"><span>Forecast use until the next order cycle (${LEAD} days delivery + ${COVER} days)</span><span>${fmt(need)}</span></div>
+  <div class="row"><span>Forecast use until the next cycle (${LEAD} days delivery + ${COVER} days)</span><span>${fmt(need)}</span></div>
   <div class="row"><span>Safety stock (${SAFETY_DAYS} days at the forecast peak)</span><span>+ ${fmt(safety)}</span></div>
   <div class="row"><span>Stock on hand today</span><span>− ${fmt(STOCK0)}</span></div>
-  <div class="row"><span>Rounded up to full cartons of 1,000</span><span>${fmt(orderQty)}</span></div>
-  <div class="row res"><span>Order quantity</span><span>${fmt(orderQty)} tablets</span></div>
-  <h3>Ordering now compared with waiting for the stockout</h3>
-  <div class="compare">
-    <div class="a"><div class="h">Order now</div><div class="n">0 patients</div>turned away. Contract price ${usd(singlePrice)} per 1,000.</div>
-    <div class="b"><div class="h">Wait until it runs out</div><div class="n">~${fmt(patientsTurned)} patients</div>sent to outside pharmacies over ${LEAD} days, then emergency stock at ${usd(SPOT)} per 1,000 (${Math.round((SPOT / singlePrice - 1) * 100)}% more).</div>
-  </div>`;
+  <div class="row"><span>Rounded up to full cartons of 1,000</span><span>${fmt(amoxQty)}</span></div>
+  <div class="row res"><span>Order quantity</span><span>${fmt(amoxQty)} capsules</span></div>
+  <div class="row"><span>Patients sent elsewhere if it is ordered only after it runs out</span><span>~${fmt(gapTabs / 21)}</span></div>`;
 $('approve').onclick = () => {
-  $('poStatus').textContent = 'Approved and sent to supplier';
-  $('poStatus').classList.add('ok');
+  $('reqStatus').textContent = 'Approved and sent to Savannah';
+  $('reqStatus').classList.add('ok');
   $('approve').disabled = true;
-  $('approve').textContent = 'Approved';
-  toast('Order approved and sent to Regional distributor A');
+  $('approve').textContent = 'Sent to Savannah';
+  toast('Stock request sent to Savannah');
 };
 
-/* ---------- Step 4: group buying ---------- */
-const FAC = [
-  {n: 'This hospital', l: 'Level 4, Kiambu', q: orderQty, me: true, c: '#0E2841'},
-  {n: 'Pilot facility 2', l: 'Level 4, Nakuru', q: 71000, c: '#0A5BB5'},
-  {n: 'Pilot facility 3', l: 'Level 4, Nyeri', q: 62000, c: '#3D7FCB'},
-  {n: 'Pilot facility 4', l: 'Level 3, Machakos', q: 48000, c: '#76A5DB'},
-  {n: 'Pilot facility 5', l: 'Level 3, Kisumu', q: 39000, c: '#AFCBEB'},
+/* ---------- Step 4: network heatmap ---------- */
+const MEDS = ['Amoxicillin 500 mg', 'Oxytocin 10 IU', 'Salbutamol inhaler', 'Ondansetron 4 mg', 'Ceftriaxone 1 g', 'Iron and folic acid', 'Amlodipine 5 mg', 'Metformin 500 mg'];
+const DAYS = [ // columns follow NET_ORDER
+  [stockoutDay, 9, 0, 33, 27, 12, 18, 40],
+  [16, 6, 11, 29, 0, 35, 19, 44],
+  [19, 31, 0, 13, 40, 26, 22, 17],
+  [21, 45, 28, 0, 36, 15, 30, 52],
+  [26, 38, 20, 41, 0, 30, 12, 9],
+  [38, 0, 25, 47, 33, 42, 28, 55],
+  [44, 52, 36, 18, 47, 39, 61, 33],
+  [51, 40, 29, 46, 20, 58, 37, 26],
 ];
-const TOTAL = FAC.reduce((a, f) => a + f.q, 0);
-const BAR_MAX = 340000;
-function renderFac(pooled) {
-  $('fac').innerHTML = FAC.map(f => {
-    const alone = f.q / CARTON * priceFor(f.q), poolAmt = f.q / CARTON * priceFor(TOTAL);
-    return `<tr class="${f.me ? 'me' : ''}"><td><span style="font-weight:500">${f.n}</span><br><span class="meta">${f.l}</span></td><td class="num">${fmt(f.q)}</td><td class="num">${usd(alone)}</td><td class="num">${pooled ? `<span style="color:var(--safe);font-weight:600">${usd(poolAmt)}</span>` : '<span class="meta">Not pooled</span>'}</td></tr>`;
-  }).join('');
+const cls = d => d === 0 ? 'c-out' : d < 15 ? 'c-low' : d <= 21 ? 'c-watch' : 'c-ok';
+$('heat').innerHTML = `<thead><tr><th>Medicine</th>${NET_ORDER.map(k => `<th>${HOSP[k].s}<span class="lv">Level ${HOSP[k].l}, ${HOSP[k].r}</span></th>`).join('')}</tr></thead><tbody>` +
+  MEDS.map((m, i) => `<tr><td>${m}</td>${DAYS[i].map(d => `<td><i class="${cls(d)}">${d === 0 ? 'Out' : d}</i></td>`).join('')}</tr>`).join('') + '</tbody>';
+const flat = DAYS.flat();
+const outN = flat.filter(d => d === 0).length, lowN = flat.filter(d => d > 0 && d <= 21).length;
+$('netTally').innerHTML = [
+  ['Hospitals connected', '8<small>Levels 4 to 6</small>'], ['Out of stock now', outN + '<small>medicine and hospital pairs</small>'],
+  ['Running out within 21 days', lowN + '<small>pairs</small>'], ['Stock requests this week', '23<small>from 7 hospitals</small>'],
+].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+const shortCount = i => DAYS[i].filter(d => d <= 21).length;
+const OPPS = [
+  [0, '412,000 capsules', true], [1, '5,200 ampoules'], [2, '1,100 inhalers'], [4, '6,800 vials'], [3, '2,400 ampoules'],
+];
+$('opps').innerHTML = OPPS.map(([i, q, top]) => `<li class="${top ? 'top' : ''}"><div class="t">${MEDS[i]}</div><div class="d">${shortCount(i)} hospitals short, ${q} requested</div>${top ? '<div class="actions" style="margin-top:12px"><button class="btn primary small" data-go="5">Build pooled order</button></div>' : ''}</li>`).join('');
+
+/* ---------- Step 5: pooled buying ---------- */
+const POOL = [
+  {k: 'acacia', q: amoxQty, c: '#0E2841'},
+  {k: 'rift', q: 126000, c: '#0A5BB5'},
+  {k: 'mothers', q: 78000, c: '#3D7FCB'},
+  {k: 'lakeview', q: 62000, c: '#76A5DB'},
+  {k: 'tumaini', q: 52000, c: '#AFCBEB'},
+];
+const POOL_TOTAL = POOL.reduce((a, p) => a + p.q, 0);
+const SPECIAL_MIN = 300000, BAR_MAX = 460000;
+function renderPoolTable(done) {
+  $('poolTable').innerHTML = `<thead><tr><th>Hospital</th><th class="num">Capsules</th><th class="num">Buying alone</th><th class="num">Through Savannah</th><th class="num">Saved</th></tr></thead><tbody>` +
+    POOL.map(p => {
+      const h = HOSP[p.k], alone = p.q / 1000 * RETAIL_PER_1000, via = p.q / 1000 * HOSP_PER_1000;
+      return `<tr><td><span style="font-weight:500">${h.n}</span><br><span class="meta">Level ${h.l}, ${h.r}</span></td><td class="num">${fmt(p.q)}</td><td class="num">${usd(alone)}</td><td class="num">${done ? usd(via) : '<span class="meta">Pending</span>'}</td><td class="num">${done ? `<b style="color:var(--safe)">${usd(alone - via)}</b>` : ''}</td></tr>`;
+    }).join('') + '</tbody>';
 }
-function renderTiers(active) {
-  $('tiers').innerHTML = TIERS.map((t, i) => `<div class="${i === active ? 'active' : ''}">${t.name}<div class="p">${usd(t.price)}</div>${t.min ? 'from ' + fmt(t.min) : 'under 100,000'} tablets</div>`).join('');
+const QUOTES = [['Distributor A', DIST_PER_1000], ['Distributor B', 27.80], ['Distributor C', 28.40]];
+function renderQuotes(n, win) {
+  $('quotes').innerHTML = QUOTES.map(([d, p], i) => `<li class="${i < n ? 'in' : ''}"><span>${d}</span><span>${usd(p)}</span></li>`).join('') +
+    `<li class="${win ? 'in win' : ''}"><span>Distributor A, after Savannah's counter-offer for ${fmt(POOL_TOTAL)} capsules</span><span>${usd(SPECIAL_PER_1000)}</span></li>`;
 }
-const tierIdx = q => TIERS.indexOf(TIERS.find(t => t.price === priceFor(q)));
+function renderLadder(show) {
+  const rows = [
+    ['Retail price, what a hospital pays buying alone', RETAIL_PER_1000, '#B4BFCC'],
+    ['What hospitals pay through Savannah, 20% below retail', HOSP_PER_1000, C.safe],
+    ['Distributor price, before the 33% retail margin', DIST_PER_1000, '#76A5DB'],
+    ['Special price Savannah negotiated for the pooled order', SPECIAL_PER_1000, C.ink],
+  ];
+  $('ladder').innerHTML = rows.map(([l, v, c]) => `<div class="rung"><span class="lbl">${l}</span><div class="track"><div class="fillb" style="width:${show ? v / RETAIL_PER_1000 * 100 : 0}%;background:${c}"></div></div><span class="val">${usd(v)}</span></div>`).join('') +
+    `<p class="meta" style="margin:16px 0 0">Savannah cuts ${usd(RETAIL_PER_1000 - SPECIAL_PER_1000)} off the retail price of every 1,000 capsules. That saving is split:</p><div class="split" style="margin-top:12px"><div class="hosp"><div class="h">Hospitals keep</div><div class="n">${usd(RETAIL_PER_1000 - HOSP_PER_1000)}</div><span class="meta">per 1,000 capsules</span></div><div class="sav"><div class="h">Savannah earns</div><div class="n">${usd(SAV_PER_1000)}</div><span class="meta">per 1,000 capsules</span></div></div>`;
+}
 function resetPool() {
-  $('poolBar').innerHTML = FAC.map(f => `<div class="seg" style="background:${f.c}" title="${f.n}: ${fmt(f.q)} tablets"></div>`).join('') +
-    TIERS.slice(1).map(t => `<div class="thr" style="left:${t.min / BAR_MAX * 100}%"><span>${t.name}</span><em>${fmt(t.min / 1000)}k</em></div>`).join('');
-  renderTiers(tierIdx(orderQty));
-  renderFac(false);
-  $('save').innerHTML = `Combined order: <span id="poolTotal">0</span> tablets`;
+  $('poolBar').innerHTML = POOL.map(p => `<div class="seg" style="background:${p.c}" title="${HOSP[p.k].n}: ${fmt(p.q)} capsules"></div>`).join('') +
+    `<div class="thr" style="left:${SPECIAL_MIN / BAR_MAX * 100}%"><span>Special price</span><em>${fmt(SPECIAL_MIN / 1000)}k</em></div>`;
+  renderPoolTable(false); renderQuotes(0, false); renderLadder(false);
 }
 $('poolBtn').onclick = () => {
   $('poolBtn').disabled = true;
   const segs = [...document.querySelectorAll('#poolBar .seg')];
-  let run = 0;
-  FAC.forEach((f, i) => setTimeout(() => {
-    segs[i].style.width = (f.q / BAR_MAX * 100) + '%';
-    run += f.q;
-    $('poolTotal').textContent = fmt(run);
-    renderTiers(tierIdx(run));
-    if (i === FAC.length - 1) setTimeout(() => {
-      const base = TIERS[0].price, best = priceFor(TOTAL);
-      const meSave = orderQty / CARTON * (base - best), netSave = TOTAL / CARTON * (base - best);
-      renderFac(true);
-      $('save').innerHTML = `Combined order: ${fmt(TOTAL)} tablets at ${usd(best)} per 1,000, ${Math.round((1 - best / base) * 100)}% below what each hospital pays alone.<span class="big">${usd(meSave)} saved for this hospital</span>${usd(netSave)} across the network on this one order. Savannah pools 38 medicines this way each cycle.`;
-      $('poolBtn').textContent = 'Pooled';
-      toast('Pooled order sent at Tier 1 distributor price');
-    }, reduced ? 0 : 500);
-  }, reduced ? 0 : i * 450));
+  const d = reduced ? 0 : 1;
+  POOL.forEach((p, i) => setTimeout(() => { segs[i].style.width = (p.q / BAR_MAX * 100) + '%'; }, d * i * 350));
+  const t1 = d * (POOL.length * 350 + 300);
+  QUOTES.forEach((_, i) => setTimeout(() => renderQuotes(i + 1, false), t1 + d * i * 400));
+  const t2 = t1 + d * (QUOTES.length * 400 + 500);
+  setTimeout(() => {
+    renderQuotes(QUOTES.length, true); renderLadder(true); renderPoolTable(true);
+    const saved = POOL_TOTAL / 1000 * (RETAIL_PER_1000 - HOSP_PER_1000);
+    const earn = POOL_TOTAL / 1000 * SAV_PER_1000;
+    $('bigsave').innerHTML = `<div class="n" id="bsN">$0</div><p><b>saved by 5 hospitals on one Amoxicillin order.</b> Savannah earns ${usd0(earn)} on the same order. Savannah pools 38 medicines this way every cycle.</p>`;
+    countTo($('bsN'), saved, 1200, v => usd0(v));
+    $('poolBtn').textContent = 'Order placed';
+    toast(`Pooled order placed with Distributor A at ${usd(SPECIAL_PER_1000)} per 1,000`);
+  }, t2);
 };
 resetPool();
 
-/* ---------- Step 5: impact ---------- */
-let saved = 71240, tick = null;
-function countTo(el, end, dur, f) {
-  if (reduced) { el.textContent = f(end); return; }
-  const t0 = performance.now();
-  const step = now => { const p = Math.min(1, (now - t0) / dur); el.textContent = f(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
-  requestAnimationFrame(step);
-}
+/* ---------- Step 6: impact ---------- */
+const IMPACT = [
+  {k: 'kilimani', saved: 184500, before: 61, now: 95},
+  {k: 'rift', saved: 112600, before: 55, now: 94},
+  {k: 'lakeview', saved: 97300, before: 60, now: 93},
+  {k: 'acacia', saved: 58400, before: 58, now: 94},
+  {k: 'mothers', saved: 49900, before: 52, now: 95},
+  {k: 'tumaini', saved: 31200, before: 47, now: 92},
+];
+const NET_SAVED = IMPACT.reduce((a, h) => a + h.saved, 0);
+const FILL_NOW = Math.round(IMPACT.reduce((a, h) => a + h.now, 0) / IMPACT.length);
+const SOURCES = [['Lower prices through pooled buying', 196300], ['Emergency purchases avoided', 141900], ['Expired stock avoided', NET_SAVED - 196300 - 141900]];
+const maxSaved = Math.max(...IMPACT.map(h => h.saved));
+$('hbars').innerHTML = `<thead><tr><th>Hospital</th><th>Saved this quarter</th><th class="num">Filled in-house</th></tr></thead><tbody>` +
+  IMPACT.map(h => `<tr><td><span style="font-weight:500">${HOSP[h.k].n}</span><br><span class="meta">Level ${HOSP[h.k].l}, ${HOSP[h.k].r}</span></td><td><div class="hb"><span class="track"><i data-w="${h.saved / maxSaved * 100}"></i></span><b>${usd0(h.saved)}</b></div></td><td class="num fr"><s>${h.before}%</s> to <b>${h.now}%</b></td></tr>`).join('') + '</tbody>';
+$('sources').innerHTML = SOURCES.map(([k, v]) => `<tr><td>${k}</td><td class="num">${usd0(v)}</td></tr>`).join('') + `<tr class="sum"><td>Total saved</td><td class="num" id="srcTotal">${usd0(NET_SAVED)}</td></tr>`;
 function fillChart() {
-  const vals = [61, 64, 70, 76, 81, 86, 89, 92, 95, 96.8, 97.9, 98.4];
-  const W = 640, H = 240, m = {l: 48, r: 24, t: 20, b: 36};
+  const vals = [58, 62, 67, 72, 77, 81, 85, 88, 90, 92, 93, FILL_NOW];
+  const W = 560, H = 230, m = {l: 48, r: 16, t: 20, b: 36};
   const X = i => m.l + i / (vals.length - 1) * (W - m.l - m.r);
   const Y = v => H - m.b - (v - 50) / 50 * (H - m.t - m.b);
   const T = (x, y, s, o = '') => `<text x="${x}" y="${y}" font-size="13" font-family="Public Sans, system-ui, sans-serif" ${o}>${s}</text>`;
@@ -796,31 +1034,31 @@ function fillChart() {
   g += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(58)}" y2="${Y(58)}" stroke="${C.alert}" stroke-dasharray="4 4"/>` + T(W - m.r, Y(58) + 18, '58% before Savannah', `text-anchor="end" fill="${C.alert}"`);
   g += `<polygon points="${m.l},${Y(50)} ${vals.map((v, i) => `${X(i)},${Y(v)}`).join(' ')} ${X(vals.length - 1)},${Y(50)}" fill="${C.safe}" opacity=".08"/>`;
   g += `<polyline points="${vals.map((v, i) => `${X(i)},${Y(v)}`).join(' ')}" fill="none" stroke="${C.safe}" stroke-width="2.5"/>`;
-  g += `<circle cx="${X(vals.length - 1)}" cy="${Y(98.4)}" r="5" fill="${C.safe}"/>`;
+  g += `<circle cx="${X(vals.length - 1)}" cy="${Y(FILL_NOW)}" r="5" fill="${C.safe}"/>` + T(X(vals.length - 1) - 8, Y(FILL_NOW) - 12, FILL_NOW + '%', `text-anchor="end" fill="${C.safe}" font-weight="600"`);
   vals.forEach((v, i) => { if (i % 3 === 0 || i === vals.length - 1) g += T(X(i), H - 10, 'Week ' + (i + 1), `text-anchor="${i === vals.length - 1 ? 'end' : i === 0 ? 'start' : 'middle'}" fill="${C.ink3}"`); });
-  $('fillChart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Prescriptions filled in-house rose from 61% in week 1 to 98.4% in week 12.">${g}</svg>`;
+  $('fillChart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Prescriptions filled in-house across the network rose from 58% to ${FILL_NOW}% over 12 weeks.">${g}</svg>`;
 }
 fillChart();
-const breakdown = () => { $('r1').textContent = '$' + fmt(saved - 12860 - 38400); $('r2').textContent = '$' + fmt(saved); };
-breakdown();
+let netSaved = NET_SAVED;
 
 /* ---------- Step entry hooks ---------- */
 const onEnter = [
   first => { if (first) playGrid(); },
   () => startStream(),
-  null,
-  null,
-  null,
+  null, null, null, null,
   first => {
     if (!first) return;
-    countTo($('kSaved'), saved, 1600, v => '$' + fmt(v));
-    countTo($('kFill'), 98.4, 1600, v => v.toFixed(1) + '%');
+    countTo($('kSaved'), NET_SAVED, 1600, v => usd0(v));
+    countTo($('kFill'), FILL_NOW, 1600, v => Math.round(v) + '%');
+    countTo($('kExp'), 4100, 1600, v => usd0(v));
+    setTimeout(() => document.querySelectorAll('#hbars i').forEach(i => i.style.width = i.dataset.w + '%'), reduced ? 0 : 100);
     setTimeout(() => {
-      tick = setInterval(() => {
+      setInterval(() => {
         if (cur !== LAST) return;
-        saved += 6 + Math.floor(Math.random() * 30);
-        $('kSaved').textContent = '$' + fmt(saved);
-        breakdown();
+        netSaved += 20 + Math.floor(Math.random() * 120);
+        $('kSaved').textContent = usd0(netSaved);
+        $('srcTotal').textContent = usd0(netSaved);
+        $('sources').rows[0].cells[1].textContent = usd0(196300 + netSaved - NET_SAVED);
       }, 2600);
     }, 1800);
   },
